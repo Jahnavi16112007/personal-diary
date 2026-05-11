@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Personal Diary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: #ff1493;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .nav-btn:hover {
+            background: #ff0080;
+        }
+        .logout-btn {
+            background: #ff6347;
+        }
+        .logout-btn:hover {
+            background: #e55236;
+        }
+        .form-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
+            border-left: 4px solid #ff69b4;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+        textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #ff1493;
+        }
+        .filters {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-row input, .filter-row select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .filter-btn {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .filter-btn:hover {
+            background: #ff1493;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .entry-list {
+            list-style: none;
+            padding: 0;
+        }
+        .entry-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff69b4;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .entry-content {
+            flex: 1;
+        }
+        .entry-date {
+            color: #ff1493;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .entry-text {
+            color: #333;
+            line-height: 1.6;
+            max-width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .entry-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .mood {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .mood.happy { background: #ffd700; color: #333; }
+        .mood.sad { background: #87ceeb; color: #333; }
+        .mood.neutral { background: #d3d3d3; color: #333; }
+        .mood.excited { background: #ff69b4; color: white; }
+        .mood.anxious { background: #ff6347; color: white; }
+        .mood.calm { background: #90ee90; color: #333; }
+        
+        .badge {
+            display: inline-block;
+            background: #ff69b4;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .star-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            color: #ddd;
+        }
+        .star-btn.favorited {
+            color: #ffd700;
+        }
+        .btn-view, .btn-edit, .btn-delete {
+            background: #ff69b4;
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .btn-view:hover, .btn-edit:hover {
+            background: #ff1493;
+        }
+        .btn-delete {
+            background: #ff6347;
+        }
+        .btn-delete:hover {
+            background: #e55236;
+        }
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-style: italic;
+        }
+        .clear-btn {
+            background: #ddd;
+            color: #333;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📔 Welcome, {{ session['username'] }}!</h1>
+            <div class="header-actions">
+                <div class="nav-links">
+                    <a href="{{ url_for('stats') }}" class="nav-btn">📊 Stats</a>
+                    <a href="{{ url_for('monthly') }}" class="nav-btn">📅 Monthly</a>
+                    <a href="{{ url_for('logout') }}" class="nav-btn logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>✍️ Add a new diary entry</h2>
+            <form action="{{ url_for('add_entry') }}" method="post">
+                <div class="form-group">
+                    <label for="entry">Entry Text:</label>
+                    <textarea name="entry" id="entry" placeholder="Write your thoughts here..." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select name="category" id="category">
+                            <option value="General">General</option>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Health">Health</option>
+                            <option value="Relationships">Relationships</option>
+                            <option value="Dreams">Dreams</option>
+                            <option value="Goals">Goals</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mood">Mood:</label>
+                        <select name="mood" id="mood">
+                            <option value="happy">😊 Happy</option>
+                            <option value="sad">😢 Sad</option>
+                            <option value="neutral" selected>😐 Neutral</option>
+                            <option value="excited">🤩 Excited</option>
+                            <option value="anxious">😰 Anxious</option>
+                            <option value="calm">😌 Calm</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit">Add Entry</button>
+            </form>
+        </div>
+
+        <div class="filters">
+            <h3>🔍 Search & Filter</h3>
+            <form method="get" action="{{ url_for('dashboard') }}">
+                <div class="filter-row">
+                    <input type="text" name="search" placeholder="Search entries..." value="{{ search_query }}">
+                    {% if categories %}
+                    <select name="category">
+                        <option value="All" {% if category_filter == 'All' %}selected{% endif %}>All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat['category'] }}" {% if category_filter == cat['category'] %}selected{% endif %}>{{ cat['category'] }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                    <button type="submit" class="filter-btn">Search</button>
+                    <a href="{{ url_for('dashboard') }}" class="clear-btn">Clear</a>
+                </div>
+            </form>
+        </div>
+
+        <h2>📚 Your Entries ({{ entries | length }})</h2>
+        {% if entries %}
+            <ul class="entry-list">
+            {% for item in entries %}
+                <li class="entry-item">
+                    <div class="entry-content">
+                        <div class="entry-date">{{ item['created_at'] }}</div>
+                        <div class="entry-text">{{ item['content'][:80] }}...</div>
+                    </div>
+                    <div class="entry-actions">
+                        <span class="mood {{ item['mood'] }}">{{ item['mood'].capitalize() }}</span>
+                        <span class="badge">{{ item['category'] }}</span>
+                        <a href="{{ url_for('view_entry', entry_id=item['id']) }}" class="btn-view">View</a>
+                        <a href="{{ url_for('edit_entry', entry_id=item['id']) }}" class="btn-edit">Edit</a>
+                        <form action="{{ url_for('delete_entry', entry_id=item['id']) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                        <form action="{{ url_for('toggle_favorite', entry_id=item['id']) }}" method="post" style="display: inline;">
+                            <button type="submit" class="star-btn {% if item['is_favorite'] %}favorited{% endif %}">★</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-message">
+                No diary entries yet. Start by writing your first entry!
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

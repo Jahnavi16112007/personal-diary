@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Entry - Personal Diary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        .back-link {
+            color: #ff1493;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+        textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+        select {
+            min-height: 40px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .btn-save {
+            background: #ff69b4;
+            color: white;
+        }
+        .btn-save:hover {
+            background: #ff1493;
+        }
+        .btn-cancel {
+            background: #ddd;
+            color: #333;
+        }
+        .btn-cancel:hover {
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Edit Entry</h1>
+            <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+        </div>
+
+        <form action="{{ url_for('edit_entry', entry_id=entry['id']) }}" method="post">
+            <div class="form-group">
+                <label for="entry">Entry Text:</label>
+                <textarea name="entry" id="entry" required>{{ entry['content'] }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select name="category" id="category">
+                        <option value="General" {% if entry['category'] == 'General' %}selected{% endif %}>General</option>
+                        <option value="Work" {% if entry['category'] == 'Work' %}selected{% endif %}>Work</option>
+                        <option value="Personal" {% if entry['category'] == 'Personal' %}selected{% endif %}>Personal</option>
+                        <option value="Travel" {% if entry['category'] == 'Travel' %}selected{% endif %}>Travel</option>
+                        <option value="Health" {% if entry['category'] == 'Health' %}selected{% endif %}>Health</option>
+                        <option value="Relationships" {% if entry['category'] == 'Relationships' %}selected{% endif %}>Relationships</option>
+                        <option value="Dreams" {% if entry['category'] == 'Dreams' %}selected{% endif %}>Dreams</option>
+                        <option value="Goals" {% if entry['category'] == 'Goals' %}selected{% endif %}>Goals</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mood">Mood:</label>
+                    <select name="mood" id="mood">
+                        <option value="happy" {% if entry['mood'] == 'happy' %}selected{% endif %}>😊 Happy</option>
+                        <option value="sad" {% if entry['mood'] == 'sad' %}selected{% endif %}>😢 Sad</option>
+                        <option value="neutral" {% if entry['mood'] == 'neutral' %}selected{% endif %}>😐 Neutral</option>
+                        <option value="excited" {% if entry['mood'] == 'excited' %}selected{% endif %}>🤩 Excited</option>
+                        <option value="anxious" {% if entry['mood'] == 'anxious' %}selected{% endif %}>😰 Anxious</option>
+                        <option value="calm" {% if entry['mood'] == 'calm' %}selected{% endif %}>😌 Calm</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-save">Save Changes</button>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
