@@ -1,0 +1,2 @@
+[tool.vercel]
+entrypoint = "jahnavi.personal diary.py"
